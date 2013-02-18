@@ -74,7 +74,6 @@ Please ensure you have followed the instructions in "Email Sending Setup" right 
 
 2. Lists all email templates.
 
-
 == Changelog ==
 
 = 1.0 =
