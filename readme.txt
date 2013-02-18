@@ -74,6 +74,10 @@ Please ensure you have followed the instructions in "Email Sending Setup" right 
 
 2. Lists all email templates.
 
+3. Abandoned Cart Settings.
+
+4. Lists Recovered Orders.
+
 == Changelog ==
 
 = 1.0 =
