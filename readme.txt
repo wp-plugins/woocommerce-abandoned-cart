@@ -69,6 +69,7 @@ Currently there is no provision for tracking guest carts. This is planned in a f
 Please ensure you have followed the instructions in "Email Sending Setup" right above this FAQ. Additionally, if you have the PRO version, please verify that you have selected "Enable abandoned cart notifications" option in Settings. With this option turned off, the abandoned carts are recorded, but emails are not sent.
 
 == Screenshots ==
+
 1. Lists all Abandoned Orders
 
 2. Lists all email templates
