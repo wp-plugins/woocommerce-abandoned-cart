@@ -16,8 +16,6 @@ Abandoned Cart plugin works in the background, sending email notifications to yo
 
 The Abandoned Cart plugin allows you to recover orders that were just a step away from closing. It enables you to create automatic & well-timed email reminders to be sent to your customers who have added your products to their cart, but did not complete the order. As a result, with this plugin you will start recovering at least 30% or more of your lost sales. Why let this 30% revenue go unclaimed?
 
-<strong>Start recovering over 30% of your lost sales now!</strong>
-
 Abandoned Cart plugin enables Customers to:
 <ol>
 <li>Recover their abandoned carts in a single click</li>
