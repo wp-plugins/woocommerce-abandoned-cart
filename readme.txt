@@ -70,13 +70,13 @@ Please ensure you have followed the instructions in "Email Sending Setup" right 
 
 == Screenshots ==
 
-1. Lists all Abandoned Orders
+1. Lists all Abandoned Orders.
 
-2. Lists all email templates
+2. Lists all email templates.
 
-3. Abandoned Cart Settings
+3. Abandoned Cart Settings.
 
-4. View Recovered Orders
+4. View Recovered Orders.
 
 == Changelog ==
 
