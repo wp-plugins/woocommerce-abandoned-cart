@@ -80,5 +80,10 @@ Please ensure you have followed the instructions in "Email Sending Setup" right 
 
 == Changelog ==
 
+= 1.1 =
+* Compatibility with WooCommerce 2.x versions
+* Fixed 404 errors with images & other files
+
 = 1.0 =
 * Initial release.
+
