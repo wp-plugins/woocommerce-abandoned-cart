@@ -3,7 +3,7 @@
 Plugin Name: WooCommerce Abandon Cart Lite Plugin
 Plugin URI: http://www.tychesoftwares.com/store/premium-plugins/woocommerce-abandoned-cart-pro
 Description: This plugin captures abandoned carts by logged-in users & emails them about it. <strong><a href="http://www.tychesoftwares.com/store/premium-plugins/woocommerce-abandoned-cart-pro">Click here to get the PRO Version.</a></strong>
-Version: 1.0
+Version: 1.1
 Author: Ashok Rane
 Author URI: http://www.tychesoftwares.com/
 */
@@ -374,7 +374,7 @@ function woocommerce_ac_delete(){
 			
 				?>
 				
-				<div style="background-image: url('<?php echo plugins_url(); ?>/woocommerce-abandon-cart-lite/images/ac_tab_icon.png') !important;" class="icon32"><br></div>
+				<div style="background-image: url('<?php echo plugins_url(); ?>/woocommerce-abandoned-cart/images/ac_tab_icon.png') !important;" class="icon32"><br></div>
 				<!--<span class="mce_abandoncart_email_variables"><br></span>-->
 				
 				<h2 class="nav-tab-wrapper woo-nav-tab-wrapper">
@@ -400,7 +400,13 @@ function woocommerce_ac_delete(){
 					wp_enqueue_script( 'jquery-ui-datepicker' );
 					
 					//wp_enqueue_script('suggest');
-					
+					wp_enqueue_script(
+							'jquery-tip',
+							plugins_url('/js/jquery.tipTip.minified.js', __FILE__),
+							'',
+							'',
+							false
+					);
 					wp_register_script( 'woocommerce_admin', plugins_url() . '/woocommerce/assets/js/admin/woocommerce_admin.js', array('jquery', 'jquery-ui-widget', 'jquery-ui-core'));
 					wp_enqueue_script( 'woocommerce_admin' );
 					
@@ -420,8 +426,8 @@ function woocommerce_ac_delete(){
 				    <!-- /////////////////////////////////////////////////////////////// -->
 				    
 				    <?php
-				    wp_enqueue_script('tinyMCE_ac', plugins_url() . '/woocommerce-abandon-cart-lite/js/tinymce/jscripts/tiny_mce/tiny_mce.js');
-				    wp_enqueue_script('ac_email_variables', plugins_url() . '/woocommerce-abandon-cart-lite/js/abandoncart_plugin_button.js');
+				    wp_enqueue_script('tinyMCE_ac', plugins_url() . '/woocommerce-abandoned-cart/js/tinymce/jscripts/tiny_mce/tiny_mce.js');
+				    wp_enqueue_script('ac_email_variables', plugins_url() . '/woocommerce-abandoned-cart/js/abandoncart_plugin_button.js');
 				    ?>
 				    
 				    <?php
@@ -487,7 +493,7 @@ function woocommerce_ac_delete(){
 					<style>
 					span.mce_abandoncart_email_variables 
 					{
-					    background-image: url("<?php echo plugins_url(); ?>/woocommerce-abandon-cart-lite/images/ac_editor_icon.png") !important;
+					    background-image: url("<?php echo plugins_url(); ?>/woocommerce-abandoned-cart/images/ac_editor_icon.png") !important;
 					    background-position: center center !important;
 					    background-repeat: no-repeat !important;
 					}
@@ -515,7 +521,7 @@ function woocommerce_ac_delete(){
 				?>
 			
 					<div class="wrap">
-						<div class="icon32" style="background-image: url('<?php echo plugins_url(); ?>/woocommerce-abandon-cart-lite/images/abandoned_cart_small.png') !important;">
+						<div class="icon32" style="background-image: url('<?php echo plugins_url(); ?>/woocommerce-abandoned-cart/images/abandoned_cart_small.png') !important;">
 							<br />
 						</div>
 							<h2><?php _e( 'WooCommerce - Abandon Cart Lite', 'woocommerce-ac' ); ?></h2>
@@ -571,7 +577,7 @@ function woocommerce_ac_delete(){
 														}
 				    									print'<input type="text" name="cart_abandonment_time" id="cart_abandonment_time" size="5" value="'.$cart_time.'"> minutes
 				    									';?>
-				    									<img class="help_tip" data-tip='<?php _e( 'Consider cart abandoned after X minutes of item being added to cart & order not placed', 'woocommerce') ?>' src="<?php echo plugins_url(); ?>/woocommerce/assets/images/help.png" /></p>
+				    									<img class="help_tip" width="16" height="16" data-tip='<?php _e( 'Consider cart abandoned after X minutes of item being added to cart & order not placed', 'woocommerce') ?>' src="<?php echo plugins_url(); ?>/woocommerce/assets/images/help.png" /></p>
 				    									<!-- <span class="description"><?php
 				    										_e( 'Consider cart abandoned after X minutes of item being added to cart & order not placed', 'woocommerce-ac' );
 				    									?></span> -->
@@ -759,7 +765,7 @@ function woocommerce_ac_delete(){
 								<td><?php echo $order_date; ?></td>
 								<td><?php echo $ac_status; ?>
 								<td id="<?php echo $abandoned_order_id; ?>">
-								<?php echo "<a href='#' id='$abandoned_order_id-$user_id' class='remove_cart'> <img src='".plugins_url()."/woocommerce-abandon-cart-lite/images/delete.png' alt='Remove Cart Data' title='Remove Cart Data'></a>"; ?>
+								<?php echo "<a href='#' id='$abandoned_order_id-$user_id' class='remove_cart'> <img src='".plugins_url()."/woocommerce-abandoned-cart/images/delete.png' alt='Remove Cart Data' title='Remove Cart Data'></a>"; ?>
 								&nbsp;
 								
 							</tr>
@@ -1007,8 +1013,8 @@ function woocommerce_ac_delete(){
 								<td><?php echo $active; ?></td>
 								
 								<td>
-									<a href="admin.php?page=woocommerce_ac_page&action=emailtemplates&mode=edittemplate&id=<?php echo $id; ?>"> <img src="<?php echo plugins_url(); ?>/woocommerce-abandon-cart-lite/images/edit.png" alt="Edit" title="Edit" width="20" height="20"> </a>&nbsp;
-									<a href="#" onclick="delete_email_template( <?php echo $id; ?> )" > <img src="<?php echo plugins_url(); ?>/woocommerce-abandon-cart-lite/images/delete.png" alt="Delete" title="Delete" width="20" height="20"> </a>&nbsp;
+									<a href="admin.php?page=woocommerce_ac_page&action=emailtemplates&mode=edittemplate&id=<?php echo $id; ?>"> <img src="<?php echo plugins_url(); ?>/woocommerce-abandoned-cart/images/edit.png" alt="Edit" title="Edit" width="20" height="20"> </a>&nbsp;
+									<a href="#" onclick="delete_email_template( <?php echo $id; ?> )" > <img src="<?php echo plugins_url(); ?>/woocommerce-abandoned-cart/images/delete.png" alt="Delete" title="Delete" width="20" height="20"> </a>&nbsp;
 								</td>
 			
 								
@@ -1270,11 +1276,11 @@ function woocommerce_ac_delete(){
 								$recovered_date_new = date('d M, Y h:i A', $recovered_date);
 								$recovered_item += 1;
 								
-								$order_items = unserialize($rec_order['_order_items'][0]);
+							/*	$order_items = unserialize($rec_order['_order_items'][0]);
 								foreach ( $order_items as $order_key => $order_value)
 								{
 									$order_total += $order_items[$order_key]['line_total'];
-								}
+								}*/
 								$recovered_total += $rec_order['_order_total'][0];
 								$abandoned_date = date('d M, Y h:i A', $value->abandoned_cart_time);
 								
@@ -1292,7 +1298,7 @@ function woocommerce_ac_delete(){
 						?>
 						<div id="recovered_stats" class="postbox" style="display:block">
 						<div class="inside" >
-						<p style="font-size: 15px"> During the selected range <strong><?php echo $count_carts; ?> </strong> carts totaling <strong><?php echo get_woocommerce_currency_symbol()." ".$total_value; ?></strong> were abandoned. We were able to recover <strong><?php echo $recovered_item; ?></strong> of them, which led to an extra <strong><?php echo get_woocommerce_currency_symbol()." ".$order_total; ?></strong> in sales</p>
+						<p style="font-size: 15px"> During the selected range <strong><?php echo $count_carts; ?> </strong> carts totaling <strong><?php echo get_woocommerce_currency_symbol()." ".$total_value; ?></strong> were abandoned. We were able to recover <strong><?php echo $recovered_item; ?></strong> of them, which led to an extra <strong><?php echo get_woocommerce_currency_symbol()." ".$recovered_total; ?></strong> in sales</p>
 						</div>
 						</div>
 						
@@ -1369,7 +1375,7 @@ function woocommerce_ac_delete(){
 													}
 													
 													print'<input type="text" name="woocommerce_ac_template_name" id="woocommerce_ac_template_name" class="regular-text" value="'.$template_name.'">';?>
-													<img class="help_tip" data-tip='<?php _e('Enter a template name for reference', 'woocommerce') ?>' src="<?php echo plugins_url(); ?>/woocommerce/assets/images/help.png" /></p>
+													<img class="help_tip" width="16" height="16" data-tip='<?php _e('Enter a template name for reference', 'woocommerce') ?>' src="<?php echo plugins_url(); ?>/woocommerce/assets/images/help.png" /></p>
 												</tr>
 												
 											    <tr>
@@ -1385,7 +1391,7 @@ function woocommerce_ac_delete(){
 													}
 													
 													print'<input type="text" name="woocommerce_ac_from_name" id="woocommerce_ac_from_name" class="regular-text" value="'.$from_name.'">';?>
-													<img class="help_tip" data-tip='<?php _e('Enter the name that should appear in the email sent', 'woocommerce') ?>' src="<?php echo plugins_url(); ?>/woocommerce/assets/images/help.png" /></p>
+													<img class="help_tip" width="16" height="16" data-tip='<?php _e('Enter the name that should appear in the email sent', 'woocommerce') ?>' src="<?php echo plugins_url(); ?>/woocommerce/assets/images/help.png" /></p>
 													<?php //echo stripslashes(get_option( 'woocommerce_ac_email_body' )); ?></textarea>
 												</tr>
 												
@@ -1402,7 +1408,7 @@ function woocommerce_ac_delete(){
 													}
 													
 													print'<input type="text" name="woocommerce_ac_email_subject" id="woocommerce_ac_email_subject" class="regular-text" value="'.$subject_edit.'">';?>
-													<img class="help_tip" data-tip='<?php _e('Enter the subject that should appear in the email sent', 'woocommerce') ?>' src="<?php echo plugins_url(); ?>/woocommerce/assets/images/help.png" /></p>
+													<img class="help_tip" width="16" height="16" data-tip='<?php _e('Enter the subject that should appear in the email sent', 'woocommerce') ?>' src="<?php echo plugins_url(); ?>/woocommerce/assets/images/help.png" /></p>
 													<?php //echo stripslashes(get_option( 'woocommerce_ac_email_body' )); ?></textarea>
 												</tr>
 			
@@ -1507,7 +1513,7 @@ function woocommerce_ac_delete(){
 				    							
 				    							<input type="text" id="send_test_email" name="send_test_email" class="regular-text" >
 				    							<input type="button" value="Send a test email" id="preview_email" onclick="javascript:void(0);">
-				    							<img class="help_tip" data-tip='<?php _e('Enter the email id to which the test email needs to be sent.', 'woocommerce') ?>' src="<?php echo plugins_url(); ?>/woocommerce/assets/images/help.png" />
+				    							<img class="help_tip" width="16" height="16" data-tip='<?php _e('Enter the email id to which the test email needs to be sent.', 'woocommerce') ?>' src="<?php echo plugins_url(); ?>/woocommerce/assets/images/help.png" />
 				    							<div id="preview_email_sent_msg" style="display:none;"></div>
 				    							</p>
 				    							
@@ -1625,7 +1631,7 @@ function woocommerce_ac_delete(){
 									// since 2.8 ajaxurl is always defined in the admin header and points to admin-ajax.php
 									$.post(ajaxurl, data, function(response)
 									{
-										$("#preview_email_sent_msg").html("<img src='<?php echo plugins_url(); ?>/woocommerce-abandon-cart-lite/images/check.jpg'>&nbsp;Email has been sent successfully.");
+										$("#preview_email_sent_msg").html("<img src='<?php echo plugins_url(); ?>/woocommerce-abandoned-cart/images/check.jpg'>&nbsp;Email has been sent successfully.");
 										$("#preview_email_sent_msg").fadeIn();
 										setTimeout(function(){$("#preview_email_sent_msg").fadeOut();},3000);
 										//alert('Got this from the server: ' + response);
