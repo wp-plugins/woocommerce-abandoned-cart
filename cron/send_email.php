@@ -1,14 +1,14 @@
 <?php 
 
 require_once('../../../../wp-load.php');
-
+//require_once(ABSPATH . 'wp-load.php');
 //if (is_woocommerce_active()) 
 {
 
 	/**
 	 * woocommerce_abandon_cart_cron class
 	 **/
-	if (!class_exists('woocommerce_abandon_cart_cron')) {
+    if (!class_exists('woocommerce_abandon_cart_cron')) {
 	
 		class woocommerce_abandon_cart_cron {
 			
@@ -32,27 +32,21 @@ require_once('../../../../wp-load.php');
 			 */
 			function woocommerce_ac_send_email() {
 				
-				//$cart_settings = json_decode(get_option('woocommerce_ac_settings'));
-				
-				//$cart_abandon_cut_off_time_cron = ($cart_settings[0]->cart_time) * 60;
-				
-				{
-				
 				global $wpdb, $woocommerce;
-			
-				//Grab the cart abandoned cut-off time from database.
+                                
+                                //Grab the cart abandoned cut-off time from database.
 				$cart_settings = json_decode(get_option('woocommerce_ac_settings'));
-			
-				$cart_abandon_cut_off_time = ($cart_settings[0]->cart_time) * 60;
-			
-				//Fetch all active templates present in the system
+                                
+                                $cart_abandon_cut_off_time = ($cart_settings[0]->cart_time) * 60;
+                                
+                                //Fetch all active templates present in the system
 				$query = "SELECT wpet . *
 				FROM `".$wpdb->prefix."ac_email_templates` AS wpet
 				WHERE wpet.is_active = '1'
 				ORDER BY `day_or_hour` DESC, `frequency` ASC ";
 				$results = $wpdb->get_results( $query );
-			
-				$hour_seconds = 3600; // 60 * 60
+                                
+                                $hour_seconds = 3600; // 60 * 60
 				$day_seconds = 86400; // 24 * 60 * 60
 				foreach ($results as $key => $value)
 				{
@@ -66,15 +60,14 @@ require_once('../../../../wp-load.php');
 					}
 			
 					$carts = $this->get_carts($time_to_send_template_after, $cart_abandon_cut_off_time);
-			
+                                        
 					$email_frequency = $value->frequency;
 					$email_body_template = $value->body;
 			
 					$email_subject = $value->subject;
 					$user_email_from = get_option('admin_email');
-					$headers[] = "From: ".$value->from_name." <".$user_email_from.">";
-					$headers[] = "Content-Type: text/html";
-					
+					$headers[] = "From: ".$value->from_name." <".$user_email_from.">"."\r\n";
+					$headers[] = "Content-Type: text/html"."\r\n";
 					$template_id = $value->id;
 					
 					foreach ($carts as $key => $value )
@@ -85,7 +78,8 @@ require_once('../../../../wp-load.php');
 							$cart_update_time = $value->abandoned_cart_time;
 			
 							$new_user = $this->check_sent_history($value->user_id, $cart_update_time, $template_id, $value->id );
-							if ( $new_user == true)
+                                                        
+                                                        if ( $new_user == true)
 							{
 								$cart_info_db = $value->abandoned_cart_info;
 			
@@ -120,7 +114,7 @@ require_once('../../../../wp-load.php');
 					}
 			
 				}
-				}
+				
 			}
 			
 			/**

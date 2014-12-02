@@ -2,7 +2,7 @@
 Contributors: ashokrane, pinal.shah
 Tags: abandon cart, shopping cart abandonment
 Requires at least: 1.3
-Tested up to: 2.0.8
+Tested up to: 4.0.1
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -41,7 +41,7 @@ Note: Some features are available in the PRO version only.
 
 **Pro Version:**
 
-**[WooCommerce Abandoned Cart Pro 1.0](http://www.tychesoftwares.com/store/premium-plugins/woocommerce-abandoned-cart-pro "WooCommerce Abandoned Cart Pro")** - The PRO version allows you to track products in abandoned carts, create unlimited email templates, track coupons, keep a track of sent emails & much more.
+**[WooCommerce Abandoned Cart Pro 2.3.4](http://www.tychesoftwares.com/store/premium-plugins/woocommerce-abandoned-cart-pro "WooCommerce Abandoned Cart Pro")** - The PRO version allows you to track products in abandoned carts, create unlimited email templates, track coupons, keep a track of sent emails & much more.
 
 
 **Email Sending Setup:**
@@ -79,6 +79,11 @@ Please ensure you have followed the instructions in "Email Sending Setup" right 
 4. Lists Recovered Orders.
 
 == Changelog ==
+
+=1.2=
+* The test emails were not getting sent.
+* Warnings fixed for some of the plugin setting pages.
+* The image urls in the email were coming broken, this is fixed.
 
 = 1.1 =
 * Compatibility with WooCommerce 2.x versions
