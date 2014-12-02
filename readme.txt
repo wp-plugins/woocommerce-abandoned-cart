@@ -80,7 +80,7 @@ Please ensure you have followed the instructions in "Email Sending Setup" right 
 
 == Changelog ==
 
-=1.2=
+= 1.2 =
 * The test emails were not getting sent.
 * Warnings fixed for some of the plugin setting pages.
 * The image urls in the email were coming broken, this is fixed.
