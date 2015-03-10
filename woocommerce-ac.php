@@ -591,7 +591,7 @@ function woocommerce_ac_delete(){
 				    								<td>
 														<?php
 														$cart_time = "";
-														if ( $enable_email_sett[0]->cart_time != '' || $enable_email_sett[0]->cart_time != 'null')
+														if (!empty($enable_email_sett) && ($enable_email_sett[0]->cart_time != '' || $enable_email_sett[0]->cart_time != 'null'))
 														{
 															$cart_time = $enable_email_sett[0]->cart_time;
 														}
