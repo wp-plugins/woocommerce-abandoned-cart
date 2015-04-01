@@ -2,7 +2,7 @@
 Contributors: ashokrane, pinal.shah, mansishah
 Tags: abandon cart, shopping cart abandonment
 Requires at least: 1.3
-Tested up to: 4.0.1
+Tested up to: 4.1.1
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
