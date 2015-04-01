@@ -12,6 +12,29 @@ Author URI: http://www.tychesoftwares.com/
 // Deletion Settings
 register_uninstall_hook( __FILE__, 'woocommerce_ac_delete');
 
+// Add a new interval of 5 minutes
+add_filter( 'cron_schedules', 'woocommerce_ac_add_cron_schedule' );
+
+function woocommerce_ac_add_cron_schedule( $schedules ) {
+	
+    $schedules['5_minutes'] = array(
+                'interval' => 300 , // 5 minutes in seconds
+                'display'  => __( 'Once Every Five Minutes' ),
+    );
+    return $schedules;
+}
+
+// Schedule an action if it's not already scheduled
+if ( ! wp_next_scheduled( 'woocommerce_ac_send_email_action' ) ) {
+    wp_schedule_event( time(), '5_minutes', 'woocommerce_ac_send_email_action' );
+}
+
+// Hook into that action that'll fire every 5 minutes
+add_action( 'woocommerce_ac_send_email_action', 'woocommerce_ac_send_email_cron' );
+function woocommerce_ac_send_email_cron() {
+    require_once( ABSPATH.'wp-content/plugins/woocommerce-abandoned-cart/cron/send_email.php' );
+}
+
 function woocommerce_ac_delete(){
 	
 	global $wpdb;

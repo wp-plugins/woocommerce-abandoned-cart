@@ -1,7 +1,7 @@
 <?php 
 
-require_once('../../../../wp-load.php');
-//require_once(ABSPATH . 'wp-load.php');
+//require_once('../../../../wp-load.php');
+require_once(ABSPATH . 'wp-load.php');
 //if (is_woocommerce_active()) 
 {
 
