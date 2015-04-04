@@ -41,7 +41,7 @@ Note: Some features are available in the PRO version only.
 
 **Pro Version:**
 
-**[WooCommerce Abandoned Cart Pro 2.3.4](http://www.tychesoftwares.com/store/premium-plugins/woocommerce-abandoned-cart-pro "WooCommerce Abandoned Cart Pro")** - The PRO version allows you to track products in abandoned carts, create unlimited email templates, track coupons, keep a track of sent emails & much more.
+**[WooCommerce Abandoned Cart Pro 2.3.8](http://www.tychesoftwares.com/store/premium-plugins/woocommerce-abandoned-cart-pro "WooCommerce Abandoned Cart Pro")** - The PRO version allows you to track products in abandoned carts, create unlimited email templates, track coupons, keep a track of sent emails & much more.
 
 
 **Email Sending Setup:**
