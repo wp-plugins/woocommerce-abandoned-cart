@@ -2,7 +2,7 @@
 Contributors: ashokrane, pinal.shah, mansishah
 Tags: abandon cart, shopping cart abandonment
 Requires at least: 1.3
-Tested up to: 4.1.1
+Tested up to: 4.2.2
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -79,6 +79,10 @@ Please ensure you have followed the instructions in "Email Sending Setup" right 
 4. Lists Recovered Orders.
 
 == Changelog ==
+
+= 1.4 =
+* The abandoned cart emails were being sent multiple times for a single email template due to a bug. This is fixed.
+* The plugin will now work on WordPress Multisite too.
 
 = 1.3 =
 * The abandoned cart email notifications are now sent out automatically without the necessity of having to set up a cron job manually.
