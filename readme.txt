@@ -1,5 +1,5 @@
 === Woocommerce Abandoned Cart Lite ===
-Contributors: ashokrane, pinal.shah, mansishah
+Contributors: ashokrane, pinal.shah, mansishah, dharakothari
 Tags: abandon cart, shopping cart abandonment
 Requires at least: 1.3
 Tested up to: 4.2.2
