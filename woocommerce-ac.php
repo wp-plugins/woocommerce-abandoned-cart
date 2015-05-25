@@ -3,7 +3,7 @@
 Plugin Name: WooCommerce Abandon Cart Lite Plugin
 Plugin URI: http://www.tychesoftwares.com/store/premium-plugins/woocommerce-abandoned-cart-pro
 Description: This plugin captures abandoned carts by logged-in users & emails them about it. <strong><a href="http://www.tychesoftwares.com/store/premium-plugins/woocommerce-abandoned-cart-pro">Click here to get the PRO Version.</a></strong>
-Version: 1.4
+Version: 1.5
 Author: Ashok Rane
 Author URI: http://www.tychesoftwares.com/
 */
@@ -52,6 +52,10 @@ function woocommerce_ac_delete(){
 	$sql_ac_sent_history = "DROP TABLE " . $table_name_ac_sent_history ;
 	require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
 	$wpdb->get_results($sql_ac_sent_history);
+	
+	delete_option ( 'woocommerce_ac_email_body' );
+	
+	delete_option ( 'woocommerce_ac_settings' );
 
 }
 //include_once("lang.php");
@@ -203,32 +207,43 @@ function woocommerce_ac_delete(){
 						 
 				require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
 				dbDelta($history_query);
+				
+				$ac_settings = new stdClass();
+				$ac_settings->cart_time = '60';
+				$woo_ac_settings[] = $ac_settings;
+				$woocommerce_ac_settings = json_encode($woo_ac_settings);
+				add_option  ( 'woocommerce_ac_settings', $woocommerce_ac_settings );
 			}
 			
 			function ac_lite_update_db_check() {
 			    global $wpdb;
-			    if( get_option('ac_lite_alter_table_queries') != 'yes') {
-			         
-			        $old_table_name = $wpdb->base_prefix . "ac_email_templates";
-			        $table_name = $wpdb->base_prefix . "ac_email_templates_lite";
-			         
-			        $alter_ac_email_table_query = "ALTER TABLE $old_table_name
-			        RENAME TO $table_name";
-			        $wpdb->get_results ( $alter_ac_email_table_query );
-			         
-			        $old_sent_table_name = $wpdb->base_prefix . "ac_sent_history";
-			        $sent_table_name = $wpdb->base_prefix . "ac_sent_history_lite";
-			         
-			        $alter_ac_sent_history_table_query = "ALTER TABLE $old_sent_table_name
-			        RENAME TO $sent_table_name";
-			        $wpdb->get_results ( $alter_ac_sent_history_table_query );
-			         
-			        $old_ac_history_table_name = $wpdb->base_prefix . "ac_abandoned_cart_history";
-			        $ac_history_table_name = $wpdb->base_prefix . "ac_abandoned_cart_history_lite";
-			         
-			        $alter_ac_abandoned_cart_history_table_query = "ALTER TABLE $old_ac_history_table_name
-			        RENAME TO $ac_history_table_name";
-			        $wpdb->get_results ( $alter_ac_abandoned_cart_history_table_query );
+			    if( get_option('ac_lite_alter_table_queries') != 'yes') {     
+			        if( $wpdb->get_var("SHOW TABLES LIKE '" . $wpdb->prefix . "ac_email_templates'") === $wpdb->prefix . 'ac_email_templates') {
+			             $old_table_name = $wpdb->base_prefix . "ac_email_templates";
+			             $table_name = $wpdb->base_prefix . "ac_email_templates_lite";
+			        
+			             $alter_ac_email_table_query = "ALTER TABLE $old_table_name
+			             RENAME TO $table_name";
+			             $wpdb->get_results ( $alter_ac_email_table_query );
+			        
+			        }
+			        
+			        if($wpdb->get_var("SHOW TABLES LIKE '" . $wpdb->prefix . "ac_sent_history'") === $wpdb->prefix . 'ac_sent_history') { 
+			             $old_sent_table_name = $wpdb->base_prefix . "ac_sent_history";
+			             $sent_table_name = $wpdb->base_prefix . "ac_sent_history_lite";
+			             $alter_ac_sent_history_table_query = "ALTER TABLE $old_sent_table_name
+			             RENAME TO $sent_table_name";
+			             $wpdb->get_results ( $alter_ac_sent_history_table_query );
+			        }
+			        
+			        if( $wpdb->get_var("SHOW TABLES LIKE '" . $wpdb->prefix . "ac_abandoned_cart_history'") === $wpdb->prefix . 'ac_abandoned_cart_history') {
+			             $old_ac_history_table_name = $wpdb->base_prefix . "ac_abandoned_cart_history";
+			             $ac_history_table_name = $wpdb->base_prefix . "ac_abandoned_cart_history_lite";
+			        
+			             $alter_ac_abandoned_cart_history_table_query = "ALTER TABLE $old_ac_history_table_name
+			             RENAME TO $ac_history_table_name";
+			             $wpdb->get_results ( $alter_ac_abandoned_cart_history_table_query );
+			        }
 			         
 			        update_option('ac_lite_alter_table_queries','yes');
 			    }
@@ -248,7 +263,12 @@ function woocommerce_ac_delete(){
 				$user_id = get_current_user_id();
 				$current_time = current_time('timestamp');
 				$cut_off_time = json_decode(get_option('woocommerce_ac_settings'));
-				$cart_cut_off_time = $cut_off_time[0]->cart_time * 60;
+				if(isset($cut_off_time[0]->cart_time)) {
+				    $cart_cut_off_time = $cut_off_time[0]->cart_time * 60;
+				} else {
+				    $cart_cut_off_time = 60 * 60;
+				}
+				
 				$compare_time = $current_time - $cart_cut_off_time;
 				$query = "SELECT * FROM `".$wpdb->base_prefix."ac_abandoned_cart_history_lite`
 				WHERE user_id = '".$user_id."'
@@ -624,9 +644,13 @@ function woocommerce_ac_delete(){
 							<?php } ?>
 							
 							<?php
-								//$enable_email_sett = array();
-								$enable_email_sett = json_decode(get_option('woocommerce_ac_settings'));
-								?>
+								
+							     $enable_email_sett_arr = array();
+							     $enable_email_sett = get_option( 'woocommerce_ac_settings' );
+							         if ( $enable_email_sett != '' && $enable_email_sett != '{}' && $enable_email_sett != '[]' && $enable_email_sett != 'null' ) {
+							         $enable_email_sett_arr = json_decode( $enable_email_sett );
+							         }
+							?>
 							<div id="content">
 							  <form method="post" action="" id="ac_settings">
 								  <input type="hidden" name="ac_settings_frm" value="save">
@@ -642,11 +666,24 @@ function woocommerce_ac_delete(){
 				    								</th>
 				    								<td>
 														<?php
+														
 														$cart_time = "";
-														if ( $enable_email_sett[0]->cart_time != '' || $enable_email_sett[0]->cart_time != 'null')
-														{
-															$cart_time = $enable_email_sett[0]->cart_time;
+														
+														if ( count($enable_email_sett_arr) > 0 ) {
+														
+														    if ( $enable_email_sett_arr[0]->cart_time != '' || $enable_email_sett_arr[0]->cart_time != 'null'){
+														
+														        $cart_time = $enable_email_sett_arr[0]->cart_time;
+														    } else {
+														        
+														        $cart_time = 60;
+														    }
 														}
+														else {
+														    	
+														    $cart_time = 60;
+														}
+				    									
 				    									print'<input type="text" name="cart_abandonment_time" id="cart_abandonment_time" size="5" value="'.$cart_time.'"> minutes
 				    									';?>
 				    									<img class="help_tip" width="16" height="16" data-tip='<?php _e( 'Consider cart abandoned after X minutes of item being added to cart & order not placed', 'woocommerce') ?>' src="<?php echo plugins_url(); ?>/woocommerce/assets/images/help.png" /></p>
@@ -809,7 +846,11 @@ function woocommerce_ac_delete(){
 							}
 							
 							$ac_cutoff_time = json_decode(get_option('woocommerce_ac_settings'));
-							$cut_off_time = $ac_cutoff_time[0]->cart_time * 60;
+							if(isset($ac_cutoff_time[0]->cart_time)) {
+							    $cut_off_time = $ac_cutoff_time[0]->cart_time * 60;
+							} else {
+							    $cut_off_time = 60 * 60;
+							}
 							$current_time = current_time('timestamp');
 							
 							$compare_time = $current_time - $cart_update_time;
