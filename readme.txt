@@ -80,6 +80,9 @@ Please ensure you have followed the instructions in "Email Sending Setup" right 
 
 == Changelog ==
 
+= 1.6 = 
+* We have included .po, .pot and .mo files in the plugin. The plugin strings can now be translated to any language using these files.
+
 = 1.5 =
 * A shortcode {{products.cart}} can now be added in the abandoned cart notification emails. It will add the product information in the email like Product image, Product name, Quantity, Price & Total. The shortcode needs to be added from the AC menu from the template editor.
 * The default value of the field "Cart abandoned cut-off time" in Settings tab was blank when the plugin is installed. This is now set to 60 minutes upon plugin activation.
