@@ -80,6 +80,11 @@ Please ensure you have followed the instructions in "Email Sending Setup" right 
 
 == Changelog ==
 
+= 1.7 =
+* Merge fields like {{products.cart}}, {{customer.firstname}}, etc. will be replaced with dummy data in the test emails that are sent from the template add / edit page. This ensures that you get a very close approximation of the actual email that will be delivered to your customers.
+* Product image size in the abandon cart notification emails is set to a fixed height & width now.
+* On WordPress Multisite, incorrect table prefix was used due to which the plugin was not functioning correctly on multisite installs. This is fixed now.
+
 = 1.6 = 
 * We have included .po, .pot and .mo files in the plugin. The plugin strings can now be translated to any language using these files.
 

@@ -1,6 +1,5 @@
 <?php 
 
-//require_once('../../../../wp-load.php');
 require_once( ABSPATH . 'wp-load.php' );
 //if (is_woocommerce_active()) 
 {
@@ -32,10 +31,7 @@ require_once( ABSPATH . 'wp-load.php' );
 			 */
 			function woocommerce_ac_send_email() {
 				
-				//$cart_settings = json_decode(get_option('woocommerce_ac_settings'));
-				
-				//$cart_abandon_cut_off_time_cron = ($cart_settings[0]->cart_time) * 60;
-				
+								
 				{
 				
 				global $wpdb, $woocommerce;
@@ -145,23 +141,24 @@ require_once( ABSPATH . 'wp-load.php' );
 								        $item_subtotal	= number_format( $item_subtotal, 2 );
 								        $product = get_product( $product_id );
 								        $prod_image = $product->get_image();
-								        $var .='<tr>
-                                                                        <td> <a href="'.$product_link_track.'">'.$prod_image.'</a></td>
+								        $image_url =  wp_get_attachment_url( get_post_thumbnail_id($product_id) );
+								        $var .='<tr align="center">
+                                                                        <td> <a href="'.$product_link_track.'"> <img src="' . $image_url . '" alt="" height="42" width="42" /> </a></td>
                                                                         <td> <a href="'.$product_link_track.'">'.$product_name.'</a></td>
                                                                         <td> '.$quantity_total.'</td>
-                                                                        <td> '.get_woocommerce_currency_symbol()." ".$item_subtotal.'</td>
-                                                                        <td> '.get_woocommerce_currency_symbol()." ".$item_total_display.'</td>
+                                                                        <td> '.get_woocommerce_currency_symbol()."".$item_subtotal.'</td>
+                                                                        <td> '.get_woocommerce_currency_symbol()."".$item_total_display.'</td>
                                                                         </tr>';
 								        $cart_total += $item_total;
 								        $item_subtotal = $item_total = 0;
 								    }
 								    $cart_total = number_format( $cart_total, 2 );
-								    $var .= '<tr>
+								    $var .= '<tr align="center">
                                                                 <td> </td>
                                                                 <td> </td>
                                                                 <td> </td>
                                                                 <td> Cart Total : </td>
-                                                                <td> '.get_woocommerce_currency_symbol()." ".$cart_total.'</td>
+                                                                <td> '.get_woocommerce_currency_symbol()."".$cart_total.'</td>
                                                                 </tr>';
 								    $var .= '</table>
                                                                 ';
@@ -196,7 +193,7 @@ require_once( ABSPATH . 'wp-load.php' );
 			
 				$query = "SELECT wpac . * , wpu.user_login, wpu.user_email
 				FROM `".$wpdb->prefix."ac_abandoned_cart_history_lite` AS wpac
-				LEFT JOIN ".$wpdb->prefix."users AS wpu ON wpac.user_id = wpu.id
+				LEFT JOIN ".$wpdb->base_prefix."users AS wpu ON wpac.user_id = wpu.id
 				WHERE cart_ignored = '0'
 				AND abandoned_cart_time < $cart_time
 				ORDER BY `id` ASC ";
