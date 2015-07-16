@@ -80,6 +80,9 @@ Please ensure you have followed the instructions in "Email Sending Setup" right 
 
 == Changelog ==
 
+= 1.8 =
+* The strings for the products table, added using the shortcode {{products.cart}} in email templates have been added to the .pot, .po and .mo files of the plugin. Now the cart data will be translated to the respective language in the reminder emails as well as the test emails.
+
 = 1.7 =
 * Merge fields like {{products.cart}}, {{customer.firstname}}, etc. will be replaced with dummy data in the test emails that are sent from the template add / edit page. This ensures that you get a very close approximation of the actual email that will be delivered to your customers.
 * Product image size in the abandon cart notification emails is set to a fixed height & width now.

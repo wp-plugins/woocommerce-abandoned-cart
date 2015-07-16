@@ -3,7 +3,7 @@
 Plugin Name: WooCommerce Abandon Cart Lite Plugin
 Plugin URI: http://www.tychesoftwares.com/store/premium-plugins/woocommerce-abandoned-cart-pro
 Description: This plugin captures abandoned carts by logged-in users & emails them about it. <strong><a href="http://www.tychesoftwares.com/store/premium-plugins/woocommerce-abandoned-cart-pro">Click here to get the PRO Version.</a></strong>
-Version: 1.7
+Version: 1.8
 Author: Tyche Softwares
 Author URI: http://www.tychesoftwares.com/
 */
@@ -1273,6 +1273,8 @@ function woocommerce_ac_delete(){
 						}
 						if ($duration_range == "") $duration_range = "last_seven";
 						//global $this->duration_range_select,$this->start_end_dates;
+						
+
 						_e( 'The Report below shows how many Abandoned Carts we were able to recover for you by sending automatic emails to encourage shoppers.', 'woocommerce-ac');
 						?>
 						<div id="recovered_stats" class="postbox" style="display:block">
@@ -1832,25 +1834,25 @@ function woocommerce_ac_delete(){
 						$body_email_preview = str_replace('{{customer.lastname}}', 'Doe', $body_email_preview);
 						$body_email_preview = str_replace('{{customer.fullname}}', 'John'." ".'Doe', $body_email_preview);
 						
-						$var =  '<h3> Your Shopping Cart </h3>
+						$var =  '<h3>'.__( "Your Shopping Cart", "woocommerce-ac" ).'</h3>
                                  <table border="0" cellpadding="10" cellspacing="0" class="templateDataTable">
                                     <tr align="center">
-                                       <th> Item </th>
-                                       <th> Name </th>
-                                       <th> Quantity </th>
-                                       <th> Price </th>
-                                       <th> Line Subtotal </th>
+                                       <th>'.__( "Item", "woocommerce-ac" ).'</th>
+                                       <th>'.__( "Name", "woocommerce-ac" ).'</th>
+                                       <th>'.__( "Quantity", "woocommerce-ac" ).'</th>
+                                       <th>'.__( "Price", "woocommerce-ac" ).'</th>
+                                       <th>'.__( "Line Subtotal", "woocommerce-ac" ).'</th>
                                     </tr>
 						            <tr align="center">
                                        <td><img class="demo_img" width="42" height="42" src="'.plugins_url().'/woocommerce-abandoned-cart/images/shoes.jpg"/></td>                                                                  
-                                       <td>Men\'\s Formal Shoes</td>
+                                       <td>'.__( "Men\'\s Formal Shoes", "woocommerce-ac" ).'</td>
                                        <td>1</td>
                                        <td>$100</td>
                                        <td>$100</td>
                                     </tr>
                                     <tr align="center">
                                        <td><img class="demo_img" width="42" height="42" src="'.plugins_url().'/woocommerce-abandoned-cart/images/handbag.jpg"/></td>                                                                  
-                                       <td>Woman\'\s Hand Bags</td>
+                                       <td>'.__( "Woman\'\s Hand Bags", "woocommerce-ac" ).'</td>
                                        <td>1</td>
                                        <td>$100</td>
                                        <td>$100</td>
@@ -1859,11 +1861,11 @@ function woocommerce_ac_delete(){
 	                                   <td></td>
 	                                   <td></td>
 	                                   <td></td>
-	                                   <td>Cart Total:</td>
+	                                   <td>'.__( "Cart Total:", "woocommerce-ac" ).'</td>
 	                                   <td>$200</td>
 	                                </tr>
                                  </table>';
-						                
+				                
 						$body_email_preview = str_replace('{{products.cart}}', $var, $body_email_preview);
 					    if (isset($_POST['send_email_id'])) {
 						      $to_email_preview = $_POST['send_email_id'];
@@ -1874,8 +1876,8 @@ function woocommerce_ac_delete(){
 						$headers[] = "From: ".$from_email_name." <".$user_email_from.">"."\r\n";
 						$headers[] = "Content-Type: text/html"."\r\n";                                                                                               
 				                        
-                                                
-						wp_mail( $to_email_preview, $subject_email_preview, stripslashes($body_email_preview), $headers );
+						$body_email_final_preview = stripslashes($body_email_preview);
+						wp_mail( $to_email_preview, $subject_email_preview, __( $body_email_final_preview, 'woocommerce-ac' ), $headers );	
 				
 						echo "email sent";
 						
