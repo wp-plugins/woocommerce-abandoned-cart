@@ -80,6 +80,9 @@ Please ensure you have followed the instructions in "Email Sending Setup" right 
 
 == Changelog ==
 
+= 1.9 =
+* Fixed security issues pointed out by Wordpress.org review team.
+
 = 1.8 =
 * The strings for the products table, added using the shortcode {{products.cart}} in email templates have been added to the .pot, .po and .mo files of the plugin. Now the cart data will be translated to the respective language in the reminder emails as well as the test emails.
 
