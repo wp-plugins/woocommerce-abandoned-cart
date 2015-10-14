@@ -3,7 +3,7 @@
 Plugin Name: WooCommerce Abandon Cart Lite Plugin
 Plugin URI: http://www.tychesoftwares.com/store/premium-plugins/woocommerce-abandoned-cart-pro
 Description: This plugin captures abandoned carts by logged-in users & emails them about it. <strong><a href="http://www.tychesoftwares.com/store/premium-plugins/woocommerce-abandoned-cart-pro">Click here to get the PRO Version.</a></strong>
-Version: 1.9
+Version: 2.1
 Author: Tyche Softwares
 Author URI: http://www.tychesoftwares.com/
 */
@@ -894,7 +894,7 @@ function woocommerce_ac_delete(){
 							{
 							?>
 							<tr id="row_<?php echo $abandoned_order_id; ?>">
-								<td><strong><?php echo "Abandoned Order #".$abandoned_order_id;?></strong><?php echo "</br>Name: ".$user_first_name[0]." ".$user_last_name[0]."<br><a href='mailto:$user_email'>".$user_email."</a>"; ?></td>
+								<td><strong> <a href="admin.php?page=woocommerce_ac_page&action=orderdetails&id=<?php echo $value->id;?>"><?php echo "Abandoned Order #".$abandoned_order_id;?></a></strong><?php  if( isset( $user_first_name[0] ) && isset( $user_last_name[0] ) ) { $user_name =  $user_first_name[0]." ".$user_last_name[0]; } echo "</br>Name: ".$user_name." <br><a href='mailto:$user_email'>".$user_email."</a>"; ?></td>
 								<td><?php echo get_woocommerce_currency_symbol()." ".$line_total; ?></td>
 								<td><?php echo $order_date; ?></td>
 								<td><?php echo $ac_status; ?>
@@ -1544,7 +1544,206 @@ function woocommerce_ac_delete(){
 						<?php
 						echo $table_data;
 						print ('</table>');
-					}
+					}elseif ( $action == 'orderdetails' ) {
+                            $ac_order_id = $_GET['id'];
+                            ?>
+                            <p> </p>
+                            <div id="ac_order_details" class="postbox" style="display:block">
+                            <h3> <p> <?php _e( "Abandoned Order #$ac_order_id Details", "woocommerce-ac" ); ?> </p> </h3>
+                                <div class="inside">
+                                    <table cellpadding="0" cellspacing="0" class="wp-list-table widefat fixed posts">
+                                    <tr>
+                                    <th> <?php _e( 'Item', 'woocommerce-ac' ); ?> </th>
+                                    <th> <?php _e( 'Id', 'woocommerce-ac' ); ?> </th>
+                                    <th> <?php _e( 'Name', 'woocommerce-ac' ); ?> </th>
+                                    <th> <?php _e( 'Quantity', 'woocommerce-ac' ); ?> </th>
+                                    <th> <?php _e( 'Line Subtotal', 'woocommerce-ac' ); ?> </th>
+                                    <th> <?php _e( 'Line Total', 'woocommerce-ac' ); ?> </th>
+                                    </tr>                                           
+                    <?php 
+                    $query = "SELECT * FROM `".$wpdb->prefix."ac_abandoned_cart_history_lite` WHERE id = %d ";
+                    $results = $wpdb->get_results( $wpdb->prepare( $query,$_GET['id'] ) );                         
+                    $shipping_charges = 0;
+                    $currency_symbol = get_woocommerce_currency_symbol();
+
+                    
+                    $user_id = $results[0]->user_id;                                
+                    if ( isset( $results[0]->user_login ) ) $user_login = $results[0]->user_login;
+                    $user_email = get_user_meta( $results[0]->user_id, 'billing_email', true );
+                    
+                    $user_first_name_temp = get_user_meta( $results[0]->user_id, 'first_name');
+                    if ( isset( $user_first_name_temp[0] ) ) $user_first_name = $user_first_name_temp[0];
+                    else $user_first_name = "";
+                    
+                    $user_last_name_temp = get_user_meta($results[0]->user_id, 'last_name');
+                    if ( isset( $user_last_name_temp[0] ) ) $user_last_name = $user_last_name_temp[0];
+                    else $user_last_name = "";
+                    
+                    $user_billing_first_name = get_user_meta( $results[0]->user_id, 'billing_first_name' );
+                    $user_billing_last_name = get_user_meta( $results[0]->user_id, 'billing_last_name' );
+                    
+                    $user_billing_company_temp = get_user_meta( $results[0]->user_id, 'billing_company' );
+                    if ( isset( $user_billing_company_temp[0] ) ) $user_billing_company = $user_billing_company_temp[0];
+                    else $user_billing_company = "";
+                    
+                    $user_billing_address_1_temp = get_user_meta( $results[0]->user_id, 'billing_address_1' );
+                    if ( isset( $user_billing_address_1_temp[0] ) ) $user_billing_address_1 = $user_billing_address_1_temp[0];
+                    else $user_billing_address_1 = "";
+                    
+                    $user_billing_address_2_temp = get_user_meta( $results[0]->user_id, 'billing_address_2' );
+                    if ( isset( $user_billing_address_2_temp[0] ) ) $user_billing_address_2 = $user_billing_address_2_temp[0];
+                    else $user_billing_address_2 = "";
+                    
+                    $user_billing_city_temp = get_user_meta( $results[0]->user_id, 'billing_city' );
+                    if ( isset( $user_billing_city_temp[0] ) ) $user_billing_city = $user_billing_city_temp[0];
+                    else $user_billing_city = "";
+                    
+                    $user_billing_postcode_temp = get_user_meta( $results[0]->user_id, 'billing_postcode' );
+                    if ( isset( $user_billing_postcode_temp[0] ) ) $user_billing_postcode = $user_billing_postcode_temp[0];
+                    else $user_billing_postcode = "";
+                    
+                    $user_billing_state_temp = get_user_meta( $results[0]->user_id, 'billing_state' );
+                    if ( isset( $user_billing_state_temp[0] ) ) $user_billing_state = $user_billing_state_temp[0];
+                    else $user_billing_state = "";
+                    
+                    $user_billing_country_temp = get_user_meta( $results[0]->user_id, 'billing_country' );
+                    if ( isset( $user_billing_country_temp[0] ) ) $user_billing_country = $user_billing_country_temp[0];
+                    else $user_billing_country = "";
+                    
+                    $user_billing_phone_temp = get_user_meta( $results[0]->user_id, 'billing_phone' );
+                    if ( isset( $user_billing_phone_temp[0] ) ) $user_billing_phone = $user_billing_phone_temp[0];
+                    else $user_billing_phone = "";
+                    
+                    $user_shipping_first_name = get_user_meta( $results[0]->user_id, 'shipping_first_name' );
+                    $user_shipping_last_name = get_user_meta( $results[0]->user_id, 'shipping_last_name' );
+                    
+                    $user_shipping_company_temp = get_user_meta( $results[0]->user_id, 'shipping_company' );
+                    if ( isset( $user_shipping_company_temp[0] ) ) $user_shipping_company = $user_shipping_company_temp[0];
+                    else $user_shipping_company = "";
+                    
+                    $user_shipping_address_1_temp = get_user_meta( $results[0]->user_id, 'shipping_address_1' );
+                    if ( isset( $user_shipping_address_1_temp[0] ) ) $user_shipping_address_1 = $user_shipping_address_1_temp[0];
+                    else $user_shipping_address_1 = "";
+                    
+                    $user_shipping_address_2_temp = get_user_meta( $results[0]->user_id, 'shipping_address_2' );
+                    if ( isset( $user_shipping_address_2_temp[0] ) ) $user_shipping_address_2 = $user_shipping_address_2_temp[0];
+                    else $user_shipping_address_2 = "";
+                    
+                    $user_shipping_city_temp = get_user_meta( $results[0]->user_id, 'shipping_city' );
+                    if ( isset( $user_shipping_city_temp[0] ) ) $user_shipping_city = $user_shipping_city_temp[0];
+                    else $user_shipping_city = "";
+                    
+                    $user_shipping_postcode_temp = get_user_meta( $results[0]->user_id, 'shipping_postcode' );
+                    if ( isset( $user_shipping_postcode_temp[0] ) ) $user_shipping_postcode = $user_shipping_postcode_temp[0];
+                    else $user_shipping_postcode = "";
+                    
+                    $user_shipping_state_temp = get_user_meta( $results[0]->user_id, 'shipping_state' );
+                    if ( isset( $user_shipping_state_temp[0] ) ) $user_shipping_state = $user_shipping_state_temp[0];
+                    else $user_shipping_state = "";
+                    
+                    $user_shipping_country_temp = get_user_meta( $results[0]->user_id, 'shipping_country' );
+                    if ( isset( $user_shipping_country_temp[0] ) ) $user_shipping_country = $user_shipping_country_temp[0];
+                    else $user_shipping_country = "";
+                                                
+                    $cart_info      = json_decode( $results[0]->abandoned_cart_info );
+                    $cart_details   = $cart_info->cart;
+                    $item_subtotal  = $item_total = 0;
+                    
+                    foreach ( $cart_details as $k => $v ) {
+                        $quantity_total = $v->quantity;
+                        $product_id     = $v->product_id;
+                        $prod_name      = get_post($product_id);
+                        $product_name   = $prod_name->post_title;
+                        
+                        // Item subtotal is calculated as product total including taxes
+                        if ( $v->line_subtotal_tax != 0 && $v->line_subtotal_tax > 0 ) {
+                            $item_subtotal = $item_subtotal + $v->line_total + $v->line_subtotal_tax;
+                        } else {
+                            $item_subtotal = $item_subtotal + $v->line_total;
+                        }
+
+                        //  Line total
+                        $item_total = $item_subtotal;
+                        $item_subtotal = $item_subtotal / $quantity_total;
+                        $item_total = number_format( $item_total, 2 );
+                        $item_subtotal = number_format( $item_subtotal, 2 );                               
+                        $product = get_product( $product_id );
+                        $prod_image = $product->get_image();
+                    ?>                   
+                        <tr>
+                        <td> <?php echo $prod_image; ?></td>
+                        <td> <?php echo $product->id; ?> </td>
+                        <td> <?php echo $product_name; ?></td>
+                        <td> <?php echo $quantity_total; ?></td>
+                        <td> <?php echo get_woocommerce_currency_symbol()." ".$item_subtotal; ?></td>
+                        <td> <?php echo get_woocommerce_currency_symbol()." ".$item_total; ?></td>
+                        </tr>
+                            
+                <?php 
+                $item_subtotal = $item_total = 0;
+                    }
+                      ?>
+                    </table>
+                        </div>  
+                            </div>
+                            <div id="ac_order_customer_details" class="postbox" style="display:block">
+                            <h3> <p> <?php _e( 'Customer Details' , 'woocommerce-ac' ); ?> </p> </h3>
+                            <div class="inside" style="height: 300px;" >                                       
+                            <div id="order_data" class="panel">
+                            <div style="width:500px;float:left">
+                            <h3> <p> <?php _e( 'Billing Details' , 'woocommerce-ac' ); ?> </p> </h3>
+                                <p> <strong> <?php _e( 'Name:' , 'woocommerce-ac' ); ?> </strong>
+                                <?php echo $user_first_name." ".$user_last_name;?>
+                                </p>                                    
+                                    <p> <strong> <?php _e( 'Address:' , 'woocommerce-ac' ); ?> </strong>
+                                    <?php echo $user_billing_company."</br>".
+                                               $user_billing_address_1."</br>".
+                                               $user_billing_address_2."</br>".
+                                               $user_billing_city."</br>".
+                                               $user_billing_postcode."</br>".
+                                               $user_billing_state."</br>".
+                                               $user_billing_country."</br>";
+                                               ?> 
+                                    </p>                                        
+                                    <p> <strong> <?php _e( 'Email:', 'woocommerce-ac' ); ?> </strong>
+                                    <a href='mailto:$user_email'><?php echo $user_email;?> </a>
+                                    </p>                                            
+                                    <p> <strong> <?php _e( 'Phone:', 'woocommerce-ac' ); ?> </strong>
+                                    <?php echo $user_billing_phone;?>
+                                    </p>
+                                        </div>                                                                                   
+                                        <div style="width:500px;float:right">
+                                        <h3> <p> <?php _e( 'Shipping Details', 'woocommerce-ac' ); ?> </p> </h3>                                       
+                                    <p> <strong> <?php _e( 'Address:', 'woocommerce-ac' ); ?> </strong>
+                                    
+                                    <?php 
+                                        if ( $user_shipping_company     == '' &&
+                                             $user_shipping_address_1   == '' &&
+                                             $user_shipping_address_2   == '' &&
+                                             $user_shipping_city        == '' &&
+                                             $user_shipping_postcode    == '' &&
+                                             $user_shipping_state       == '' &&
+                                             $user_shipping_country     == '') {
+                                            echo "Shipping Address same as Billing Address";
+                                            } else { ?>                                
+                                        <?php echo $user_shipping_company."</br>".
+                                               $user_shipping_address_1."</br>".
+                                               $user_shipping_address_2."</br>".
+                                               $user_shipping_city."</br>".
+                                               $user_shipping_postcode."</br>".
+                                               $user_shipping_state."</br>".
+                                               $user_shipping_country."</br>";
+                                               ?> 
+                                               <br><br>
+                                               <strong> Shipping Charges: </strong>
+                                               <?php if ( $shipping_charges != 0 ) echo $currency_symbol . $shipping_charges;?>
+                                    </p>
+                                    <?php }?>                            
+                                        </div>
+                                    </div>
+                                </div>
+                             </div>                
+                            <?php }
 							
 				if ( isset( $_GET[ 'action' ] ) ){
 				       $action = $_GET[ 'action' ];
@@ -1652,7 +1851,7 @@ function woocommerce_ac_delete(){
 													$initial_data = "";
 													if ( $mode == 'edittemplate' )
 													{
-														$initial_data = $results[0]->body;
+														$initial_data = stripslashes( $results[0]->body );
 													}
 																										
 													echo "<textarea id='woocommerce_ac_email_body' name='woocommerce_ac_email_body' rows='15'' cols='80'>".$initial_data."</textarea>";

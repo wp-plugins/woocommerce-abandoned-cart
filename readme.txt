@@ -1,8 +1,8 @@
 === Woocommerce Abandoned Cart Lite ===
-Contributors: ashokrane, pinal.shah, mansishah, dharakothari
+Contributors: ashokrane, pinal.shah, mansishah, dharakothari, bhavik.kiri
 Tags: abandon cart, shopping cart abandonment
 Requires at least: 1.3
-Tested up to: 4.2.2
+Tested up to: 4.3.1
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -16,32 +16,33 @@ Abandoned Cart plugin works in the background, sending email notifications to yo
 
 The Abandoned Cart plugin allows you to recover orders that were just a step away from closing. It enables you to create automatic & well-timed email reminders to be sent to your customers who have added your products to their cart, but did not complete the order. As a result, with this plugin you will start recovering at least 30% or more of your lost sales. Why let this 30% revenue go unclaimed?
 
-Abandoned Cart plugin enables Customers to:
+Abandoned Cart Lite plugin enables to do the following things:
 <ol>
 <li>Recover their abandoned carts in a single click</li>
-<li>Automatically logs in registered customers</li>
-</ol>
-
-Abandoned Cart plugin enables Admin to:
-<ol>
 <li>Identify the Abandoned Orders information, including the products that were abandoned</li>
-<li>Offer incentives to customers to return and complete their checkout with discounts and coupons.</li>
-<li>Create unlimited email templates to be sent at intervals that you set</li>
-<li>Add custom variables like Customer Name, Product Information, Coupons, etc. in the email template</li>
-<li>Embed Woocommerce coupons in the emails being sent to customers</li>
-<li>Copy HTML from anywhere & create templates using the powerful Rich Text Editor</li>
-<li>Track whether expired coupons are causing cart abandonment</li>
-<li>You are notified by email when an order is recovered</li>
 <li>Track abandoned orders value v/s recovered orders value</li>
-<li>Track emails sent, emails opened, links clicked for each template/email</li>
+<li>Create unlimited email templates to be sent at intervals that you set - Intervals start from 1 hour after cart is abandoned</li>
+<li>Add custom variables like Customer First Name, Customer Last name, Customer full name & Product Cart Information in the email template</li>
+<li>Copy HTML from anywhere & create templates using the powerful Rich Text Editor</li>
 <li>Automatically stops email notifications when a customer makes a purchase or uses the cart recovery link</li>
 </ol>
 
-Note: Some features are available in the PRO version only.
+Abandoned Cart PRO plugin enables to do the following additional things:
+<ol>
+<li>Works off-the-shelf as it comes with 3 default email templates</li>
+<li>Offer incentives to customers to return and complete their checkout with discounts and coupons</li>
+<li>Add custom variables like Customer Name, Product Information, Coupons, etc. in the email template</li>
+<li>Embed Woocommerce coupons & also generate unique coupons in the emails being sent to customers</li>
+<li>Track whether expired coupons are causing cart abandonment</li>
+<li>Admin is notified by email when an order is recovered</li>
+<li>Track emails sent, emails opened, links clicked for each template/email</li>
+<li>Product report allows you to see which products are being abandoned & which are being recovered the most</li>
+<li>Create unlimited email templates to be sent at intervals that you set - Intervals start from 1 minute after cart is abandoned</li>
+</ol>
 
 **Pro Version:**
 
-**[WooCommerce Abandoned Cart Pro 2.3.8](http://www.tychesoftwares.com/store/premium-plugins/woocommerce-abandoned-cart-pro "WooCommerce Abandoned Cart Pro")** - The PRO version allows you to track products in abandoned carts, create unlimited email templates, track coupons, keep a track of sent emails & much more.
+**[WooCommerce Abandoned Cart Pro 2.4.2](http://www.tychesoftwares.com/store/premium-plugins/woocommerce-abandoned-cart-pro "WooCommerce Abandoned Cart Pro")** - The PRO version allows you to track products in abandoned carts, create unlimited email templates, track coupons, keep a track of sent emails & much more.
 
 
 **Email Sending Setup:**
@@ -68,6 +69,10 @@ Currently there is no provision for tracking guest carts. This is planned in a f
 
 Please ensure you have followed the instructions in "Email Sending Setup" right above this FAQ. Additionally, if you have the PRO version, please verify that you have selected "Enable abandoned cart notifications" option in Settings. With this option turned off, the abandoned carts are recorded, but emails are not sent.
 
+= Where can I find the documentation on how to setup the plugin? =
+
+The documentation can be found **[here](https://www.tychesoftwares.com/woocommerce-abandon-cart-plugin-documentation/ "WooCommerce Abandoned Cart Pro")**. The Lite version is a subset of the Pro version, so the same documentation can be used to refer for the Lite version of the plugin.
+
 == Screenshots ==
 
 1. Lists all Abandoned Orders.
@@ -79,6 +84,16 @@ Please ensure you have followed the instructions in "Email Sending Setup" right 
 4. Lists Recovered Orders.
 
 == Changelog ==
+
+= 2.1 =
+* From this version, you can view the abandoned order details, which includes product details, billing & shipping address, under the Abandoned Orders tab.
+
+= 2.0.1 =
+* Applied fix for warning displayed on the abandoned orders page.
+
+= 2.0 =
+* The image link was coming broken while creating or editing the template if the image is present on the same server. This is fixed now.
+* Added translations file for Hebrew which was contributed by a user.
 
 = 1.9 =
 * Fixed security issues pointed out by Wordpress.org review team.
