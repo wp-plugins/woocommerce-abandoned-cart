@@ -20,9 +20,10 @@ Abandoned Cart Lite plugin enables to do the following things:
 <ol>
 <li>Recover their abandoned carts in a single click</li>
 <li>Identify the Abandoned Orders information, including the products that were abandoned</li>
+<li>The plugin now captures abandoned guest carts. A guest user's cart will be captured on the Checkout page, if it is abandoned after entering the email address.</li>
 <li>Track abandoned orders value v/s recovered orders value</li>
 <li>Create unlimited email templates to be sent at intervals that you set - Intervals start from 1 hour after cart is abandoned</li>
-<li>Add custom variables like Customer First Name, Customer Last name, Customer full name & Product Cart Information in the email template</li>
+<li>Add custom variables like Customer First Name, Customer Last name, Customer full name, Cart Link & Product Cart Information in the email template</li>
 <li>Copy HTML from anywhere & create templates using the powerful Rich Text Editor</li>
 <li>Automatically stops email notifications when a customer makes a purchase or uses the cart recovery link</li>
 </ol>
@@ -65,6 +66,8 @@ Abandoned Cart Plugin relies on a function called WP-Cron, and this function onl
 
 Currently there is no provision for tracking guest carts. This is planned in a future release.
 
+UPDATE: This feature has been released in version 2.2.
+
 = Why are abandoned cart notification emails not getting sent? =
 
 Please ensure you have followed the instructions in "Email Sending Setup" right above this FAQ. Additionally, if you have the PRO version, please verify that you have selected "Enable abandoned cart notifications" option in Settings. With this option turned off, the abandoned carts are recorded, but emails are not sent.
@@ -84,6 +87,11 @@ The documentation can be found **[here](https://www.tychesoftwares.com/woocommer
 4. Lists Recovered Orders.
 
 == Changelog ==
+
+= 2.2 =
+* The plugin now captures abandoned guest carts. A guest user's cart will be captured on the Checkout page, if it is abandoned after entering the email address.
+* A new shortcode "{{cart.link}}" is added, which will include the cart URL of your shop.
+* Fixed some warnings being displayed in the Settings tab.
 
 = 2.1 =
 * From this version, you can view the abandoned order details, which includes product details, billing & shipping address, under the Abandoned Orders tab.

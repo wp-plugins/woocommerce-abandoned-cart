@@ -1,8 +1,18 @@
 <?php 
 
-require_once( ABSPATH . 'wp-load.php' );
-//if (is_woocommerce_active()) 
-{
+if(defined('WP_CONTENT_FOLDERNAME')){
+    $wp_content_dir_name = WP_CONTENT_FOLDERNAME;
+}else{
+    $wp_content_dir_name = "wp-content";
+}
+
+
+
+$url = dirname( __FILE__ );
+$my_url = explode( $wp_content_dir_name , $url );
+$path = $my_url[0];
+
+require_once $path . 'wp-load.php';
 	/**
 	 * woocommerce_abandon_cart_cron class
 	 **/
@@ -68,6 +78,13 @@ require_once( ABSPATH . 'wp-load.php' );
 					
 					foreach ( $carts as $key => $value )
 					{
+					    if ( $value->user_type == "GUEST" ) {
+					        $value->user_login = "";
+					        $query_guest = "SELECT billing_first_name, billing_last_name, email_id FROM `".$wpdb->prefix."ac_guest_abandoned_cart_history_lite` WHERE id = %d";
+					        $results_guest = $wpdb->get_results( $wpdb->prepare( $query_guest, $value->user_id ) );
+					        $value->user_email = $results_guest[0]->email_id;
+					    }
+					    
 						$cart_info_db_field = json_decode( $value->abandoned_cart_info );
 						if ( count( $cart_info_db_field->cart ) > 0 )
 						{
@@ -80,9 +97,24 @@ require_once( ABSPATH . 'wp-load.php' );
 			
 								$email_body = $email_body_template;
 								
-								$email_body = str_replace( "{{customer.firstname}}", get_user_meta( $value->user_id, 'first_name', true ), $email_body );
-								$email_body = str_replace( "{{customer.lastname}}", get_user_meta( $value->user_id, 'last_name', true ), $email_body );
-								$email_body = str_replace( "{{customer.fullname}}", get_user_meta( $value->user_id, 'first_name', true )." ".get_user_meta( $value->user_id, 'last_name', true ), $email_body );
+							     if ( $value->user_type == "GUEST" ) {
+								    if ( isset( $results_guest[0]->billing_first_name ) ) {
+								        $email_body = str_replace( "{{customer.firstname}}", $results_guest[0]->billing_first_name, $email_body );
+								        $email_subject = str_replace( "{{customer.firstname}}", $results_guest[0]->billing_first_name, $email_subject );
+								    }
+								
+								    if ( isset( $results_guest[0]->billing_last_name ) ) $email_body = str_replace( "{{customer.lastname}}", $results_guest[0]->billing_last_name, $email_body );
+								
+								    if ( isset( $results_guest[0]->billing_first_name ) && isset( $results_guest[0]->billing_last_name ) ) $email_body = str_replace( "{{customer.fullname}}", $results_guest[0]->billing_first_name." ".$results_guest[0]->billing_last_name, $email_body );
+								    else if ( isset( $results_guest[0]->billing_first_name ) ) $email_body = str_replace( "{{customer.fullname}}", $results_guest[0]->billing_first_name, $email_body );
+								    else if ( isset( $results_guest[0]->billing_last_name)) $email_body = str_replace( "{{customer.fullname}}", $results_guest[0]->billing_last_name, $email_body );
+								} else {
+								    $email_body = str_replace( "{{customer.firstname}}", get_user_meta( $value->user_id, 'first_name', true ), $email_body );
+								    $email_subject = str_replace( "{{customer.firstname}}", get_user_meta( $value->user_id, 'first_name', true ), $email_subject );
+								    $email_body = str_replace( "{{customer.lastname}}", get_user_meta( $value->user_id, 'last_name', true ), $email_body );
+								    $email_body = str_replace( "{{customer.fullname}}", get_user_meta( $value->user_id, 'first_name', true )." ".get_user_meta( $value->user_id, 'last_name', true ), $email_body );
+								}
+								
 								$query_sent = "INSERT INTO `".$wpdb->prefix."ac_sent_history_lite` ( template_id, abandoned_order_id, sent_time, sent_email_id )
 								               VALUES ( %s, %s, '".current_time( 'mysql' )."', %s )";
 									
@@ -161,6 +193,19 @@ require_once( ABSPATH . 'wp-load.php' );
 								    $email_subject = str_replace( "{{product.name}}", __( $sub_line_prod_name, "woocommerce-ac" ), $email_subject );
 								}
 								
+								if ( $woocommerce->version < '2.3' ) {
+								    $cart_page_link	= $woocommerce->cart->get_cart_url();
+								} else {
+								    $cart_page_id = woocommerce_get_page_id( 'cart' );
+								    $cart_page_link = $cart_page_id ? get_permalink( $cart_page_id ) : '';
+								}
+								
+								$encoding_cart = $email_sent_id.'&url='.$cart_page_link;
+								
+								$validate_cart = $this->encrypt_validate ($encoding_cart);
+								$cart_link_track = get_option('siteurl').'/?wacp_action=track_links&validate=' . $validate_cart;
+								$email_body	= str_replace( "{{cart.link}}", $cart_link_track, $email_body );
+								
 								$user_email = $value->user_email;
 			
 								$email_body_final = stripslashes( $email_body );
@@ -198,6 +243,16 @@ require_once( ABSPATH . 'wp-load.php' );
 				return $results;
 			
 				exit;
+			}
+			
+			/******
+			*  This function is used to encode the validate string.
+			******/
+			function encrypt_validate( $validate ) {
+			     
+			    $cryptKey  = 'qJB0rGtIn5UB1xG03efyCp';
+			    $validate_encoded = base64_encode( mcrypt_encrypt( MCRYPT_RIJNDAEL_256, md5( $cryptKey ), $validate, MCRYPT_MODE_CBC, md5( md5( $cryptKey ) ) ) );
+			    return $validate_encoded;
 			}
 			
 			function check_sent_history( $user_id, $cart_update_time, $template_id, $id ) {
@@ -238,7 +293,5 @@ require_once( ABSPATH . 'wp-load.php' );
 	$woocommerce_abandon_cart_cron = new woocommerce_abandon_cart_cron();
 
 	$woocommerce_abandon_cart_cron->woocommerce_ac_send_email();
-	
-}
 
 ?>
