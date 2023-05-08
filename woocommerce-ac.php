@@ -1528,7 +1528,7 @@ function woocommerce_ac_delete(){
 						} else {
 						     $add_var = "";
 						}    
-						$i = 1 + $add_var;
+						$i = 1 + intval($add_var);
 						foreach ( $results as $key => $value )
 						{
 								$id = $value->id;
